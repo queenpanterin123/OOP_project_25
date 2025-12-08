@@ -1,0 +1,104 @@
+import java.io.FileReader;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+
+public class Main {
+
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader d = new BufferedReader(new FileReader("inputData/data_a2.txt"));
+        ArrayList<Double> data = new ArrayList<>();
+        String line;
+        int length = 0;
+        while ((line = d.readLine()) != null) {
+            double nr = Double.parseDouble(line);
+            data.add(nr);
+            length += 1;
+        }
+        //sprawdzam czy działa arraylista
+        //data.forEach(number->{
+        //    System.out.println(number);
+        // });
+        System.out.println("Task I.1\nMartyna Uranowska, 300979");
+        //nw jak zrobić Data filename: data_a1.txt
+        System.out.println("Length of the series: " + length);
+
+        double maximum = getMax(data);
+        System.out.printf("Max value: %.3f\n", maximum);
+
+        double minimum = getMin(data);
+        System.out.printf("Min value: %.3f\n", minimum);
+
+        double mean = getMean(data);
+        System.out.printf("Mean value: %.3f\n", mean);
+
+        double median = getMedian(data);
+        System.out.printf("Median value: %.3f\n", median);
+
+        double epsilon = (maximum - minimum)/100;
+        int nr_central = noOfCE(data,mean,epsilon);
+        System.out.println("Number of central elements: " + nr_central);
+    }
+
+    public static double getMax(ArrayList<Double> data) {
+        double max = data.get(0);
+        for (double number : data) {
+            if (number > max)
+                max = number;
+        }
+        ;
+        return max;
+    }
+
+    public static double getMin(ArrayList<Double> data) {
+        double min = data.get(0);
+        for (double number : data) {
+            if (number < min)
+                min = number;
+        }
+        ;
+        return min;
+    }
+
+    public static double getMean(ArrayList<Double> data) {
+        double sum = 0;
+        for (double number : data) {
+            sum += number;
+        }
+        double mean = sum / data.size();
+        return mean;
+    }
+
+    public static double getMedian(ArrayList<Double> data){
+        ArrayList<Double> s_data = new ArrayList<>(data); //kopiuję arraylist, zeby nie zmieniac naszej pierwotnej
+        Collections.sort(s_data);
+        double median = (double) 0;
+        int size = s_data.size();
+        if( size%2!=0){
+            int i = size/2;
+            median = s_data.get(i);
+        }else{
+            int i = size/2;
+            double a = s_data.get(i-1);
+            double b = s_data.get(i);
+            median = (a+b)/2;
+        }
+        return median;
+    }
+
+    public static int noOfCE(ArrayList<Double> data, double mean, double eps){
+        ArrayList<Double> central = new ArrayList<>();
+        double low = mean - eps;
+        double high = mean + eps;
+        for(double number: data){
+            if(number>low & number<high){
+                central.add(number);
+            }
+        }
+        return central.size();
+    }
+
+
+}
