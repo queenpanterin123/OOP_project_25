@@ -8,35 +8,46 @@ public class Main {
 
 
     public static void main(String[] args) throws IOException {
+        // task I.1
+        processOneFile("data_a1.txt","data_a.log","Task I.1");
+        // task I.2
+        processOneFile("data_b1.txt","data_b.log","Task I.2");
+    // task II.2
+        processOneFile("data_c1.txt","data_c.log","Task II.2");
 
-        //wczytanie a
+        //PRZED TASK III
+        /* //wczytanie a
         BufferedReader a = new BufferedReader(new FileReader("inputData/data_a1.txt"));
         ArrayList<Readout> dataA = new ArrayList<>();
+        int noInvRecA=0;
         String linea;
         while ((linea = a.readLine()) != null) {
             double nr = Double.parseDouble(linea);
             dataA.add(new Readout(nr));
         }
-        System.out.println(getOutputInfo(dataA,0,"Task I.1","data_a1.txt"));
+        FileContent fcA=new FileContent(dataA,noInvRecA,"data_a1.txt");
+        System.out.println(getOutputInfo(fcA,"Task I.1"));
 
        //wczytanie b
         Logger logger_b = new LoggerFile("data_b.log");
         BufferedReader b = new BufferedReader(new FileReader("inputData/data_b1.txt"));
         ArrayList<Readout> dataB = new ArrayList<>();
         String lineb;
-        int noInvalidRec=0;
+        int noInvalidRecB=0;
         while ((lineb = b.readLine()) != null){
             try{
                 double nr = Double.parseDouble(lineb);
                 dataB.add(new Readout(nr));
             }catch(NumberFormatException e){
-                noInvalidRec+=1;
+                noInvalidRecB+=1;
                 logger_b.log(Logger.Level.ERROR, "Faulty record in [data_b1.txt]: " + lineb);
 
             }
         }
+        FileContent fcB=new FileContent(dataB,noInvalidRecB,"data_b1.txt");
+        System.out.println(getOutputInfo(fcB,"Task I.2"));
 
-        System.out.println(getOutputInfo(dataB,noInvalidRec,"Task I.2","data_b1.txt"));
+        //System.out.println(getOutputInfo(dataB,noInvalidRec,"Task I.2","data_b1.txt"));
         logger_b.flush();
 
         //wczytanie c
@@ -57,33 +68,25 @@ public class Main {
                 logger_c.log(Logger.Level.ERROR, "Faulty record in [data_c1.txt]: " + linec);
             }
         }
+        FileContent fcC=new FileContent(dataC,noInvalidRecC,"data_c1.txt");
+        System.out.println(getOutputInfo(fcC,"Task II.1"));
 
-        System.out.println(getOutputInfo(dataC,noInvalidRecC,"Task II.1","data_c1.txt"));
+        //System.out.println(getOutputInfo(dataC,noInvalidRecC,"Task II.1","data_c1.txt"));
         logger_c.flush();
+
+         */
     }
 
 
-
-
-
-//funkcje moje
-    static String getOutputInfo (ArrayList<Readout> data,
-                                 int noInvRecords,
-                                 String title,
-                                 String filename){
-        String sep="\n-----------------------\n";
-        String txt=title+"\nMartyna Uranowska, 300979"+sep+"Data filename: "+filename+ "\n"+
-                "\nLength of the series: "+data.size()+
-                "\nMax value: " + getMax(data)+
-                "\nMin value: " + getMin(data) +
-                String.format("\nMean value: %.3f", getMean(data)) +
-                "\nMedian: " +  getMedian(data)+
-                "\nNumber of central elements: "+noOfCE(data);
-        if(noInvRecords != 0){
-            txt+="Number of invalid records: "+noInvRecords+sep;
+        //od Task III
+        static void processOneFile(String filename, String logFilename,
+                                   String title) throws IOException{
+            Logger logger = new LoggerFile(logFilename);
+            FileContent fContent = IOHelper.readFile(filename, logger);
+            System.out.println(IOHelper.getOutputInfo(fContent,title));
+            logger.flush();
         }
-            return txt;
-    }
+
 
     static Readout getMax(ArrayList<Readout> data) {
         Readout max = data.get(0);
